@@ -19,9 +19,10 @@ research and iterative interviews — with strict test-driven development at
 every step. Every task starts with a failing test, production code exists
 only to make tests pass, and refactoring happens under green. Tests use
 testcontainers for real services, mock only at boundaries, and make no
-external network calls. Specs have phases, tasks, resume context, a decision
-log, and a TDD log. They live in `.specs/` at the project root and work
-with any AI coding tool that can read markdown.
+external network calls. Specs have phases, tasks, acceptance criteria, a
+registry, resume context, a decision log, a TDD log, and a deviations
+log. They live in `.specs/` at the project root and work with any AI
+coding tool that can read markdown.
 
 Whether `.specs/` is committed is repository policy. Respect `.gitignore`
 and the user's preference for tracked vs local-only spec state.
@@ -40,7 +41,14 @@ and the user's preference for tracked vs local-only spec state.
    guidance instead of hard failure on malformed rows.
 6. **TDD invariant**: No production code without a failing test. The implement
    workflow enforces red-green-refactor at every task. Tests are executed via
-   the actual test runner, not assumed to pass.
+   the actual test runner, not assumed to pass. This is sacred — see "Tests
+   Are Sacred" and "Blocking Rule" in the implement section.
+7. **Progress tracking is sacred**: After completing any task, immediately
+   update SPEC.md (checkbox, `← current` marker, phase marker, TDD log)
+   AND registry.md (progress count, date). Then re-read both files to
+   verify the edits landed correctly. Never move to the next task without
+   updating both files. Never end a session with the registry out of sync
+   with SPEC.md. This is non-negotiable — if you do nothing else, do this.
 
 ## Claude Code Plugin
 
@@ -225,14 +233,24 @@ Phases group by feature, not by test vs implementation. Each phase contains
 interleaved TEST-IMPL pairs. When all tasks in a phase are done, the phase
 is `[completed]` and the next phase becomes `[in-progress]`.
 
-#### Update Transaction (required order)
+#### Update Transaction (sacred — never skip steps)
 
-1. Update `SPEC.md` first (status/task/phase/resume context/TDD log)
-2. Recompute progress directly from `SPEC.md` checkboxes
-3. Update the matching registry row (status/progress/updated)
-4. Re-read both files to verify consistency
+Progress tracking is sacred (see Critical Invariant #7). Stale tracking
+is the single most common failure mode — it makes resume unreliable and
+the registry useless.
+
+1. Edit `SPEC.md` (checkbox, current marker, phase marker, resume context,
+   TDD log entry).
+2. Recompute progress directly from `SPEC.md` checkboxes.
+3. Edit the matching registry row (status, progress, updated date).
+4. **Verify**: Re-read both `SPEC.md` and `registry.md` to confirm the
+   edits are correct. If the registry progress doesn't match the SPEC.md
+   checkbox count, fix it now.
 5. If registry update fails, keep `SPEC.md` as source of truth and emit a
-   warning with exact repair action for `.specs/registry.md`
+   warning with exact repair action for `.specs/registry.md`.
+
+**If you notice you forgot to update after a previous task, stop what
+you're doing and update now before continuing.**
 
 Also:
 - If a task is more complex than expected, split it into subtasks
@@ -246,6 +264,8 @@ Also:
 When all in-scope tasks are done:
 
 - **All tasks in the spec complete:**
+  - Verify all Acceptance Criteria are checked off. If any remain unchecked,
+    report which ones and ask the user before marking the spec complete.
   - Set all phases to `[completed]`
   - Set spec status to `completed` in frontmatter and registry
   - Update the `updated` date
@@ -337,6 +357,26 @@ Status values: `active`, `paused`, `completed`, `archived`
 - Each impl task specifies: file path, function/class names, and which test
   task it satisfies
 
+### Acceptance Criteria
+
+Testable conditions that define when the spec is "done". Written during
+forge, verified after each phase completes. Format: checkboxes with
+specific, verifiable statements — not vague goals.
+
+```markdown
+## Acceptance Criteria
+
+- [ ] Users can sign in with Google OAuth and receive a JWT
+- [ ] Expired tokens return 401 with `{"error": "token_expired"}`
+- [ ] Refresh tokens rotate on each use (old token is invalidated)
+- [ ] All auth paths have corresponding red-green-refactor cycles in TDD Log
+```
+
+Check off criteria as they are satisfied during implementation. At phase
+completion, review which acceptance criteria are now met. At spec
+completion, all criteria must be checked — if any remain unchecked, the
+spec is not done.
+
 ### Testing Architecture
 
 Specs include a **Testing Architecture** section specifying:
@@ -411,6 +451,11 @@ tags: [<tag1>, <tag2>]
 
 ## Overview
 <2-4 sentences: what and why>
+
+## Acceptance Criteria
+- [ ] <Testable condition 1>
+- [ ] <Testable condition 2>
+- [ ] <Testable condition 3>
 
 ## Architecture
 <ASCII art or Mermaid diagram>
@@ -561,6 +606,8 @@ Present research findings and ask targeted questions:
    - **Isolation strategy** ("Mock the payment gateway at the HTTP boundary,
      or use a testcontainer with a sandbox endpoint?")
    - **Coverage targets** ("Any minimum coverage requirement?")
+   - **Acceptance criteria** ("What does 'done' look like? Any specific
+     conditions that must be true when this is complete?")
 4. **Propose a rough approach** and ask for reactions
 
 **STOP after presenting questions.** Wait for the user to answer. Do not
@@ -582,7 +629,10 @@ every task can be described concretely. Two rounds is typical.
 Synthesize all research and interviews into a SPEC.md using the template
 above. The spec should include:
 
-- YAML frontmatter, Overview, Architecture Diagram
+- YAML frontmatter, Overview
+- **Acceptance Criteria** — Testable checkbox conditions defining "done".
+  Derived from interview answers. Check them off during implementation.
+- Architecture Diagram
 - **Testing Architecture** (mandatory) — framework, isolation strategy,
   coverage targets, test commands, anti-patterns
 - **Library Choices** — comparison table with rationale
@@ -601,9 +651,11 @@ above. The spec should include:
 6. Library choices are consistent throughout
 7. Overview accurately summarizes what phases deliver
 8. No gaps — everything implementation needs is covered by a task
-9. Tasks alternate TEST-IMPL within each phase (true red-green-refactor)
-10. Every `[IMPL-XX-NN]` task immediately follows its `[TEST-XX-NN]` task
-11. Every `[TEST-XX-NN]` task is followed by an `[IMPL-XX-NN]` that satisfies it
+9. Verify acceptance criteria are specific, testable, and cover the key
+   behaviors the user expects
+10. Tasks alternate TEST-IMPL within each phase (true red-green-refactor)
+11. Every `[IMPL-XX-NN]` task immediately follows its `[TEST-XX-NN]` task
+12. Every `[TEST-XX-NN]` task is followed by an `[IMPL-XX-NN]` that satisfies it
 
 Save to `.specs/<id>/SPEC.md`. Update `.specs/registry.md` — set status
 to `active`. Mark first phase `[in-progress]`, first task `← current`.

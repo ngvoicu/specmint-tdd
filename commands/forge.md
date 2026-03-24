@@ -193,6 +193,8 @@ generic questions — your research should inform very specific questions.
    - Technical choices: "I see you're using Library A for similar things.
      Should we stick with that or is there a reason to try Library B?"
    - User-facing behavior: "What should happen when X fails?"
+   - Acceptance criteria: "What does 'done' look like? Any specific
+     conditions that must be true when this is complete?"
 4. **Ask testing-specific questions** (2-3 probes):
    - "I found <framework> for testing. Do you want to stick with it or
      switch to something else? Any preferences for test runner config?"
@@ -291,27 +293,31 @@ spec should include:
 2. **Overview**: 2-4 sentences capturing the goal and scope. Someone reading
    just this section should understand what's being built and why. Mention
    that this spec follows TDD methodology.
-3. **Architecture Diagram**: ASCII art or Mermaid diagram showing the system
+3. **Acceptance Criteria**: Testable checkbox conditions defining "done".
+   Each criterion must be specific and verifiable. Derived from the
+   interview answers and research findings. Check them off during
+   implementation as they become satisfied.
+4. **Architecture Diagram**: ASCII art or Mermaid diagram showing the system
    architecture, data flow, or component relationships. Every non-trivial spec
    should have at least one diagram. Use ASCII for simple flows, Mermaid for
    complex relationships (ER diagrams, state machines, flowcharts).
-4. **Library Choices**: Table comparing evaluated libraries with the selected
+5. **Library Choices**: Table comparing evaluated libraries with the selected
    pick and rationale. Include version numbers. Format:
    `| Need | Library | Version | Alternatives | Rationale |`
-5. **Testing Architecture**: Dedicated section describing the test strategy:
+6. **Testing Architecture**: Dedicated section describing the test strategy:
    - Test frameworks and runners (with versions)
    - Test directory structure and naming conventions
    - Isolation strategy: which services get testcontainers, which get mocks
    - Mocking approach and libraries
    - Coverage targets and tools
    - CI integration notes
-6. **Phases**: Major milestones grouped by feature area. Each phase contains
+7. **Phases**: Major milestones grouped by feature area. Each phase contains
    interleaved TEST-IMPL task pairs — each pair is one red-green-refactor
    cycle. No separate TEST and IMPL phases.
    - `Phase 1: <Feature Area> [pending]` — alternating TEST/IMPL tasks
    - `Phase 2: <Next Feature> [pending]` — alternating TEST/IMPL tasks
    - ...and so on.
-7. **Tasks**: Two types of tasks alternating within each phase:
+8. **Tasks**: Two types of tasks alternating within each phase:
 
    **TEST tasks** (RED — write first):
    - File path where the test will be written
@@ -327,21 +333,21 @@ spec should include:
    Tasks alternate: TEST, IMPL, TEST, IMPL. Numbering is continuous across
    all phases (TEST-AUTH-01, IMPL-AUTH-02, TEST-AUTH-03, IMPL-AUTH-04...).
 
-8. **Testing Strategy**: Comprehensive testing plan covering unit tests,
+9. **Testing Strategy**: Comprehensive testing plan covering unit tests,
    integration tests, e2e tests, and edge case tests. Specify frameworks,
    test file paths, and what each test covers. Every feature task should have
    a corresponding test task.
-9. **TDD Log**: Empty section ready for implementation to fill in. Format:
+10. **TDD Log**: Empty section ready for implementation to fill in. Format:
    ```markdown
    ## TDD Log
 
    | Task | Red (failing) | Green (passing) | Refactor |
    |------|--------------|-----------------|----------|
    ```
-10. **Resume Context**: Write the initial context as if briefing someone who
+11. **Resume Context**: Write the initial context as if briefing someone who
     will start implementing tomorrow. Mention the TDD workflow: start with
     the first TEST task, write a failing test, then move to its IMPL task.
-11. **Decision Log**: Every decision from the interviews, with rationale.
+12. **Decision Log**: Every decision from the interviews, with rationale.
 
 **Coherence and logic review (mandatory before presenting):**
 
@@ -362,6 +368,8 @@ Before presenting the spec to the user, review it for coherence and logic:
 10. Ensure the overview accurately summarizes what the phases will deliver
 11. Look for gaps — is there anything the implementation would need that
     isn't covered by a task?
+12. Verify acceptance criteria are specific, testable, and cover the key
+    behaviors the user expects
 
 **Quality check before presenting:**
 
