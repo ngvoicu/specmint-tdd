@@ -258,22 +258,40 @@ Also:
 - Log non-obvious technical decisions to the Decision Log
 - If implementation diverges from the spec (errors found, better approach
   discovered, assumptions proved wrong), log it in the **Deviations** section
+- **Phase review**: When all tasks in a phase are done, review before moving
+  on — re-read the phase's tasks and acceptance criteria, verify each task's
+  implementation matches what was specified, check that the TDD Log has
+  entries for every TEST-IMPL pair, and check for missing edge cases or spec
+  drift. Fix issues before marking the phase complete. Log findings in the
+  Decision Log.
+
+#### Verification Gate
+
+Before reporting any phase or spec as complete, provide evidence:
+- Run the relevant test suite via the project's test runner
+- Show the actual command and output — not a summary, not "tests pass"
+- If tests fail, fix the issues before claiming completion
+- Never use language like "should pass", "probably works", or "seems correct"
+
+Evidence first, then assertions. The TDD log captures per-task evidence;
+this gate ensures phase and spec completion also have fresh verification.
 
 #### Completion
 
 When all in-scope tasks are done:
 
 - **All tasks in the spec complete:**
+  - **Run the full test suite** and show the output (verification gate)
   - Verify all Acceptance Criteria are checked off. If any remain unchecked,
     report which ones and ask the user before marking the spec complete.
   - Set all phases to `[completed]`
   - Set spec status to `completed` in frontmatter and registry
   - Update the `updated` date
-  - Run the full test suite one final time to confirm everything passes
   - Present a summary of what was implemented, including TDD Log highlights
   - Suggest next spec to activate if any are paused
 
 - **Only a phase completed (not all tasks):**
+  - **Run tests** for the phase's scope and show the output (verification gate)
   - Report the phase completion and remaining work
   - Set the next phase to `[in-progress]` if applicable
   - State whether the next phase is TEST or IMPL
@@ -669,6 +687,16 @@ above. The spec should include:
     feature phase with alternating TEST-IMPL pairs inside.
 11. Every `[IMPL-XX-NN]` task immediately follows its `[TEST-XX-NN]` task
 12. Every `[TEST-XX-NN]` task is followed by an `[IMPL-XX-NN]` that satisfies it
+13. **Placeholder check**: Search the spec for "TBD", "TODO", "placeholder",
+    "TBC", "to be determined", "will be decided", "figure out" — replace
+    every instance with a concrete decision or remove the section
+14. **Internal consistency**: Verify task count in overview matches actual
+    tasks, all task code references are valid, `-> satisfies` references
+    point to existing TEST tasks, library versions don't conflict
+15. **Scope check**: Compare the spec against the interview answers — does
+    it deliver what was discussed? Nothing more, nothing less?
+16. **Ambiguity check**: For each task, ask "could an implementer complete
+    this without asking me a question?" If no, add detail until yes.
 
 Save to `.specs/<id>/SPEC.md`. Update `.specs/registry.md` — set status
 to `active`. Mark first phase `[in-progress]`, first task `← current`.

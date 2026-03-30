@@ -33,6 +33,12 @@ Parse the user's request to determine what to implement:
    `IMPL-` for implementation tasks
 6. Present a brief plan: "I'll implement N tasks across M phases. Starting
    with [TASK-CODE] — <task description>. TDD cycle: RED."
+7. **TUI Progress**: Create a TaskCreate entry for each in-scope task so
+   they appear as live checkboxes in the Claude Code TUI:
+   - subject: `[TASK-CODE] <task description>`
+   - activeForm: `RED: [TEST-XX-NN]` or `GREEN: [IMPL-XX-NN]`
+   The SPEC.md checkboxes remain the source of truth — TUI entries are a
+   convenience view for real-time progress.
 
 Task format in SPEC.md (tasks alternate TEST-IMPL within each phase):
 - `- [ ] [TEST-XX-01] Write tests for X in tests/file.test.ts`
@@ -44,7 +50,8 @@ For each TEST-IMPL pair in scope, in order:
 
 ### RED — TEST Task
 
-1. Mark the task with `<- current` in the SPEC.md
+1. Set the task's TUI entry to `in_progress` via TaskUpdate
+2. Mark the task with `<- current` in the SPEC.md
 2. Read the task specification: file path, test descriptions, isolation strategy
 3. Write the test file at the specified path
 4. Write test code with the assertions described in the spec:
@@ -65,10 +72,12 @@ For each TEST-IMPL pair in scope, in order:
 8. Log the failure output in the TDD Log:
    `| [TEST-XX-NN] | <command>: N tests, N failed — <key message> | — | — |`
 9. Check off the task: `- [ ]` -> `- [x]`, remove `<- current`
+10. Set the task's TUI entry to `completed` via TaskUpdate
 
 ### GREEN — IMPL Task
 
-1. Mark the task with `<- current` in the SPEC.md
+1. Set the task's TUI entry to `in_progress` via TaskUpdate
+2. Mark the task with `<- current` in the SPEC.md
 2. Read which TEST task this satisfies (from `-> satisfies [TEST-XX-NN]`)
 3. **Read the test file.** Understand exactly what the tests expect — return
    values, status codes, error messages, data shapes. The tests are the spec.
@@ -104,7 +113,8 @@ For each TEST-IMPL pair in scope, in order:
    approach, run tests again. Do not modify tests to accommodate refactoring.
 5. Log refactoring in the TDD Log Refactor column (or "none")
 6. Check off the task: `- [ ]` -> `- [x]`, remove `<- current`
-7. Update spec progress (checkboxes, phase status, registry, Resume Context)
+7. Set the task's TUI entry to `completed` via TaskUpdate
+8. Update spec progress (checkboxes, phase status, registry, Resume Context)
 
 **Then move to the next TEST-IMPL pair and repeat the cycle.**
 
@@ -184,6 +194,23 @@ After completing each task, immediately update the spec files:
 If you realize you forgot to update after a previous task, stop and fix
 it now before continuing with the next task.
 
+## Phase Review (after completing a phase)
+
+When all tasks in a phase are completed, review before moving to the next:
+
+1. Dispatch the `superpowers:code-reviewer` agent (if available) with:
+   - The phase requirements from the SPEC.md
+   - The list of files created/modified during this phase
+   - The acceptance criteria relevant to this phase
+   - The TDD Log entries for this phase
+2. If no reviewer agent is available, do an inline review:
+   - Re-read the phase's tasks and acceptance criteria
+   - Verify each task's implementation matches what was specified
+   - Check for missing edge cases, incomplete implementations, or spec drift
+   - Verify the TDD Log has entries for every TEST-IMPL pair in the phase
+3. If the review finds issues, fix them before marking the phase complete
+4. Log any review findings in the Decision Log
+
 ## Handle Issues
 
 - If a task is more complex than expected, split it into subtasks and update
@@ -198,21 +225,56 @@ it now before continuing with the next task.
 - If a test is flaky (passes sometimes, fails sometimes): flag it immediately,
   investigate the cause, fix the non-determinism before proceeding
 
+## Parallel Task Execution (optional)
+
+When multiple TEST-IMPL pairs within a phase are independent (no shared
+files, no sequential dependencies), you may dispatch them in parallel
+using the Agent tool:
+
+1. Identify which TEST-IMPL pairs have no file-level or logical
+   dependencies on each other
+2. Dispatch an Agent for each independent pair with:
+   - The full TEST and IMPL task specifications from the SPEC.md
+   - The research notes, library choices, and Testing Architecture
+   - Clear instructions to follow the RED-GREEN-REFACTOR cycle
+   - Instructions to return TDD Log entries for the pair
+3. After all agents complete, integrate results
+4. Run the full test suite to verify no conflicts between parallel work
+5. Update all checkboxes, TDD Log, registry, and TUI entries in a batch
+
+Default to sequential execution. Only parallelize when pairs are clearly
+independent. When in doubt, execute sequentially — TDD's sequential
+discipline is more important than speed.
+
+## Verification Gate (mandatory before claiming completion)
+
+Before reporting any phase or spec as complete, provide evidence:
+
+1. Run the project's test suite (or the relevant subset) via Bash
+2. Show the actual command and output in your response
+3. If tests fail, fix the issues before claiming completion
+4. Never use language like "should pass", "probably works", or "seems correct"
+
+This reinforces the Test Execution Rule: evidence first, then assertions.
+The TDD log already captures per-task evidence; this gate ensures phase
+and spec completion also have fresh verification. No exceptions.
+
 ## Completion
 
 When all in-scope tasks are done:
 
 - If all tasks in the spec are complete:
+  - **Run the full test suite** and show the output (verification gate)
   - Verify all Acceptance Criteria are checked. If any remain unchecked,
     report which ones and ask the user before marking complete.
   - Set all phases to `[completed]`
   - Set spec status to `completed` in frontmatter
   - Update `.specs/registry.md` with `completed` status
-  - Run the full test suite one final time to confirm everything passes
-  - Present a summary: tasks completed, files created/modified, tests
-    passing, coverage if available
+  - Present a summary: tasks completed, files created/modified, test
+    output, coverage if available
   - Suggest next spec to activate if any are paused
 - If only a phase was completed:
+  - **Run tests** for the phase's scope and show the output (verification gate)
   - Report phase completion and remaining work
   - Set the next phase to `[in-progress]` if applicable
   - State whether the next phase is TEST or IMPL

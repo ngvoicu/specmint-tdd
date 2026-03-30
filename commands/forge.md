@@ -397,6 +397,16 @@ Before presenting the spec to the user, review it for coherence and logic:
     isn't covered by a task?
 12. Verify acceptance criteria are specific, testable, and cover the key
     behaviors the user expects
+13. **Placeholder check**: Search the spec for "TBD", "TODO", "placeholder",
+    "TBC", "to be determined", "will be decided", "figure out" — replace
+    every instance with a concrete decision or remove the section
+14. **Internal consistency**: Verify task count in overview matches actual
+    tasks, all task code references are valid, `-> satisfies` references
+    point to existing TEST tasks, library versions don't conflict
+15. **Scope check**: Compare the spec against the interview answers — does
+    it deliver what was discussed? Nothing more, nothing less?
+16. **Ambiguity check**: For each task, ask "could an implementer complete
+    this without asking me a question?" If no, add detail until yes.
 
 **Quality check before presenting:**
 
