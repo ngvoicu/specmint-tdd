@@ -1,5 +1,5 @@
 ---
-name: specsmith-tdd
+name: specmint-tdd
 description: >
   TDD-first spec management for AI coding workflows. Use this skill when the
   user explicitly mentions specs, forging, or structured planning: says "forge",
@@ -12,7 +12,7 @@ description: >
   specs or forging.
 ---
 
-# Spec Smith TDD
+# Spec Mint TDD
 
 Turn ephemeral plans into structured, persistent specs built through deep
 research and iterative interviews — with strict test-driven development at
@@ -52,8 +52,8 @@ and the user's preference for tracked vs local-only spec state.
 
 ## Claude Code Plugin
 
-If running as a Claude Code plugin, slash commands like `/specsmith-tdd:forge`,
-`/specsmith-tdd:resume`, `/specsmith-tdd:pause` etc. are available. The
+If running as a Claude Code plugin, slash commands like `/specmint-tdd:forge`,
+`/specmint-tdd:resume`, `/specmint-tdd:pause` etc. are available. The
 `/forge` command replaces plan mode with deep research, iterative interviews,
 and spec writing.
 
@@ -533,7 +533,7 @@ full forge workflow: setup, research deeply, interview the user, iterate
 until clear, then write the spec.
 
 **Plan mode:** In Claude Code, if the environment is in read-only plan mode,
-ask the user to exit plan mode (Shift+Tab) and rerun `/specsmith-tdd:forge`.
+ask the user to exit plan mode (Shift+Tab) and rerun `/specmint-tdd:forge`.
 Other tools: proceed normally.
 
 **The forge workflow never produces application code.** Its outputs are only
@@ -561,7 +561,7 @@ Research runs on two parallel tracks:
 
 #### Track A: Researcher Agent
 
-**In Claude Code:** Spawn the `specsmith-tdd:researcher` agent (Task tool)
+**In Claude Code:** Spawn the `specmint-tdd:researcher` agent (Task tool)
 for exhaustive parallel research. Provide: the user's request, spec ID,
 output path `.specs/<id>/research-01.md`, and any Context7 findings from
 Track B. The researcher maps the project architecture, reads 15-30 files,
@@ -791,7 +791,7 @@ read and write files can use these specs:
 - **Gemini CLI**: Snippet in GEMINI.md
 - **Humans**: Readable and editable in any text editor
 
-To configure another tool, run `npx skills add ngvoicu/specsmith-tdd -a <tool>`.
+To configure another tool, run `npx skills add ngvoicu/specmint-tdd -g -a <tool>`.
 
 ## Behavioral Notes
 

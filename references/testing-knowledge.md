@@ -1,6 +1,6 @@
 # Testing Knowledge Base
 
-Language-agnostic testing reference for the specsmith-tdd researcher and
+Language-agnostic testing reference for the specmint-tdd researcher and
 forge workflows. Use this to identify the right tools, patterns, and
 anti-patterns for any project stack.
 

@@ -21,7 +21,7 @@ This file defines functional contracts for `commands/*.md` and the universal
 
 ## Command Contracts
 
-### `/specsmith-tdd:forge`
+### `/specmint-tdd:forge`
 
 1. Resolve `<spec-id>` before research output paths are referenced.
 2. Collision-check existing spec IDs before creating new files.
@@ -31,12 +31,12 @@ This file defines functional contracts for `commands/*.md` and the universal
    writing any research output.
 5. Output scope is `.specs/` artifacts only (`research-*.md`, `interview-*.md`,
    `SPEC.md`, `registry.md` updates).
-6. After approval, handoff to `/specsmith-tdd:implement` instead of implementing
+6. After approval, handoff to `/specmint-tdd:implement` instead of implementing
    inside forge.
 7. Interview must ask about acceptance criteria ("What does 'done' look like?").
 8. SPEC.md must include `## Acceptance Criteria` with testable checkboxes.
 
-### `/specsmith-tdd:implement`
+### `/specmint-tdd:implement`
 
 1. Supports scope parsing: current flow, phase-specific, all phases, task code.
 2. For each completed task: checkbox + current marker + phase markers +
@@ -50,35 +50,35 @@ This file defines functional contracts for `commands/*.md` and the universal
    - Mark phase `[blocked]` only when the phase is blocked.
    - Record blocker context in Resume Context/Decision Log/Deviations as needed.
 
-### `/specsmith-tdd:resume`
+### `/specmint-tdd:resume`
 
 1. If no active spec exists, list specs and request target.
 2. Include progress, current phase/task, and Resume Context in output.
 
-### `/specsmith-tdd:pause`
+### `/specmint-tdd:pause`
 
 1. If no active spec exists, report no-op and stop.
 2. Persist detailed Resume Context with concrete file/function references.
 3. Set status `paused` and sync registry.
 
-### `/specsmith-tdd:switch`
+### `/specmint-tdd:switch`
 
 1. Validate target ID and target `SPEC.md` existence before pausing current spec.
 2. If target already active, report and stop.
 3. Pause current (if any), activate target, resume target, sync registry.
 
-### `/specsmith-tdd:list`
+### `/specmint-tdd:list`
 
 1. Handle missing registry gracefully.
 2. Group by status in order: active, paused, completed, archived.
 3. If `SPEC.md` missing for a row, keep row visible and flag it.
 
-### `/specsmith-tdd:status`
+### `/specmint-tdd:status`
 
 1. Show detailed phase/task breakdown for active spec.
 2. If no active spec, guide to activate one.
 
-### `/specsmith-tdd:openapi`
+### `/specmint-tdd:openapi`
 
 1. Generate/update `.openapi/openapi.yaml` and `.openapi/endpoints/*.md`.
 2. Preserve manual additions when updating existing files.

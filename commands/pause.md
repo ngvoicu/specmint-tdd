@@ -5,7 +5,7 @@ disable-model-invocation: true
 
 # Pause Spec (TDD)
 
-Follow the "Pausing" workflow from the specsmith-tdd skill (SKILL.md).
+Follow the "Pausing" workflow from the specmint-tdd skill (SKILL.md).
 See also `references/spec-format.md` for the SPEC.md template.
 
 1. Read `.specs/registry.md` to find the spec with `active` status

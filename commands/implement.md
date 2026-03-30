@@ -6,7 +6,7 @@ disable-model-invocation: true
 # Implement Spec (TDD)
 
 Implement tasks from the active spec using strict test-driven development.
-See also the specsmith-tdd skill (SKILL.md) for global invariants and
+See also the specmint-tdd skill (SKILL.md) for global invariants and
 `references/spec-format.md` for the SPEC.md template.
 
 User's request: $ARGUMENTS
@@ -162,7 +162,7 @@ are done, the phase is `[completed]` and the next phase becomes
 
 ### Update Progress (sacred — never skip)
 
-Progress tracking is the most important bookkeeping in specsmith. If you
+Progress tracking is the most important bookkeeping in specmint-tdd. If you
 skip this, resume breaks, the registry lies, and the spec becomes useless.
 After completing each task, immediately update the spec files:
 

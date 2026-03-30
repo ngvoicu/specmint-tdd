@@ -1,8 +1,8 @@
-# Spec Smith TDD
+# Spec Mint TDD
 
 **Plan mode, but actually good — with strict test-driven development.**
 
-Spec Smith TDD is a standalone fork of [Spec Smith](https://github.com/ngvoicu/specsmith) that enforces strict TDD in AI coding workflows. Every task starts with a failing test, no production code ships without red tests, and all tests are isolated. Specs have feature phases with alternating TEST-IMPL task pairs (true red-green-refactor per pair), a Testing Architecture section, and a TDD Log audit trail proving discipline was followed.
+Spec Mint TDD is a standalone fork of [Spec Mint Core](https://github.com/ngvoicu/specmint-core) that enforces strict TDD in AI coding workflows. Every task starts with a failing test, no production code ships without red tests, and all tests are isolated. Specs have feature phases with alternating TEST-IMPL task pairs (true red-green-refactor per pair), a Testing Architecture section, and a TDD Log audit trail proving discipline was followed.
 
 Works with Claude Code (as a plugin), Codex, Cursor, Windsurf, Cline, Gemini CLI, and any AI coding tool that can read files.
 
@@ -17,13 +17,13 @@ Every AI coding tool has some version of "plan mode" — think before you code. 
 - **Enforce TDD** — write tests first, then implement, then refactor
 - **Prove discipline** — audit trail of red-green-refactor cycles
 
-Spec Smith TDD fixes all of this.
+Spec Mint TDD fixes all of this.
 
 ## How It Works
 
 ### The Forge Workflow
 
-Run `/specsmith-tdd:forge "add user authentication with OAuth"` and Spec Smith TDD takes over:
+Run `/specmint-tdd:forge "add user authentication with OAuth"` and Spec Mint TDD takes over:
 
 **1. Deep Research** — Exhaustive codebase scan (reads 10-20+ actual files, not just file names), web search for best practices, Context7 library docs, library comparisons, cross-skill research (frontend-design, datasmith-pg, etc.), **test infrastructure analysis** (existing frameworks, runners, mocking patterns, testcontainers, coverage tools). Everything saved to `.specs/<id>/research-01.md`.
 
@@ -162,9 +162,9 @@ API. Uses the existing middleware pattern in src/middleware/.
 
 ### The TDD Difference
 
-The key difference from [Spec Smith](https://github.com/ngvoicu/specsmith) is the strict test-driven structure:
+The key difference from [Spec Mint Core](https://github.com/ngvoicu/specmint-core) is the strict test-driven structure:
 
-| Aspect | Spec Smith | Spec Smith TDD |
+| Aspect | Spec Mint Core | Spec Mint TDD |
 |--------|-----------|---------------|
 | Phase structure | Sequential phases | **Feature phases** with interleaved TEST-IMPL task pairs |
 | Task ordering | Independent tasks | **TEST-IMPL alternating**: red-green-red-green per pair |
@@ -182,7 +182,7 @@ The key difference from [Spec Smith](https://github.com/ngvoicu/specsmith) is th
 
 ## Installation
 
-Two ways to use Spec Smith TDD, depending on your setup.
+Two ways to use Spec Mint TDD, depending on your setup.
 
 ### Path 1: Claude Code Plugin (Full — Recommended)
 
@@ -190,18 +190,18 @@ Everything: all 8 slash commands (`/forge`, `/implement`, `/resume`, `/pause`, `
 
 ```bash
 # In Claude Code, run:
-/plugin marketplace add ngvoicu/specsmith-tdd
-/plugin install specsmith-tdd
+/plugin marketplace add ngvoicu/specmint-tdd
+/plugin install specmint-tdd
 ```
 
 Or manually:
 ```bash
-git clone https://github.com/ngvoicu/specsmith-tdd.git ~/.claude/plugins/specsmith-tdd
+git clone https://github.com/ngvoicu/specmint-tdd.git ~/.claude/plugins/specmint-tdd
 ```
 
 After install, just run:
 ```
-/specsmith-tdd:forge "add user authentication"
+/specmint-tdd:forge "add user authentication"
 ```
 
 ### Path 2: Quick Setup via npx (Any Tool)
@@ -210,22 +210,22 @@ Installs the SKILL.md into your tool's skill/instruction directory so it knows h
 
 ```bash
 # Claude Code (skill only — auto-triggers, no slash commands)
-npx skills add ngvoicu/specsmith-tdd -a claude-code
+npx skills add ngvoicu/specmint-tdd -g -a claude-code
 
 # OpenAI Codex
-npx skills add ngvoicu/specsmith-tdd -a codex
+npx skills add ngvoicu/specmint-tdd -g -a codex
 
 # Cursor
-npx skills add ngvoicu/specsmith-tdd -a cursor
+npx skills add ngvoicu/specmint-tdd -g -a cursor
 
 # Windsurf
-npx skills add ngvoicu/specsmith-tdd -a windsurf
+npx skills add ngvoicu/specmint-tdd -g -a windsurf
 
 # Cline
-npx skills add ngvoicu/specsmith-tdd -a cline
+npx skills add ngvoicu/specmint-tdd -g -a cline
 
 # Gemini CLI
-npx skills add ngvoicu/specsmith-tdd -a gemini
+npx skills add ngvoicu/specmint-tdd -g -a gemini
 ```
 
 For Claude Code, this installs SKILL.md with auto-triggers ("resume", "what was I working on", "create a spec for X", "red green refactor"). You **don't** get slash commands or the researcher agent — use Path 1 for the full plugin.
@@ -250,34 +250,34 @@ For other tools, this installs the SKILL.md which teaches the tool the full TDD 
 
 ```
 # Start a new spec with deep research + test infrastructure analysis
-/specsmith-tdd:forge "add OAuth authentication"
+/specmint-tdd:forge "add OAuth authentication"
 → Deep research (codebase + internet + Context7 + library comparison + test infra)
 → Interview rounds (targeted questions + testing preferences)
 → Writes SPEC.md with Testing Architecture, alternating TEST-IMPL tasks, TDD Log
 → Coherence review (incl. TEST↔IMPL cross-references) before presenting
 
 # Implement with strict red-green-refactor
-/specsmith-tdd:implement                    # Continue from current task
-/specsmith-tdd:implement phase 3            # Implement all tasks in Phase 3
-/specsmith-tdd:implement all phases         # Implement everything remaining
+/specmint-tdd:implement                    # Continue from current task
+/specmint-tdd:implement phase 3            # Implement all tasks in Phase 3
+/specmint-tdd:implement all phases         # Implement everything remaining
 
 # Generate OpenAPI spec from your codebase
-/specsmith-tdd:openapi
+/specmint-tdd:openapi
 → Scans routes, schemas, security config
 → Writes .openapi/openapi.yaml + per-endpoint docs
 
 # Session ends — save TDD context
-/specsmith-tdd:pause
+/specmint-tdd:pause
 → Writes resume context (TDD phase, failing tests, last run, next step)
 
 # New session — pick up where you left off
-/specsmith-tdd:resume
+/specmint-tdd:resume
 → Reads resume context, shows TDD phase, continues from exact spot
 
 # Juggling features
-/specsmith-tdd:list                    # See all specs
-/specsmith-tdd:switch auth-system      # Pauses current, activates auth-system
-/specsmith-tdd:status                  # Detailed progress with TDD indicators
+/specmint-tdd:list                    # See all specs
+/specmint-tdd:switch auth-system      # Pauses current, activates auth-system
+/specmint-tdd:status                  # Detailed progress with TDD indicators
 ```
 
 ### Any Tool Flow (Codex, Cursor, Windsurf, Cline, Gemini CLI)
@@ -328,7 +328,7 @@ gemini "switch to auth-system"
 
 ## The TDD Cycle
 
-This is the core of Spec Smith TDD. Each TEST-IMPL task pair is one red-green-refactor cycle:
+This is the core of Spec Mint TDD. Each TEST-IMPL task pair is one red-green-refactor cycle:
 
 ```
 [TEST-AUTH-01] Write test for JWT verify
@@ -366,7 +366,7 @@ The spec format is pure markdown. Claude Code, Codex, Cursor, Windsurf, Cline, a
 Most tools can be set up via npx (see [Path 2](#path-2-quick-setup-via-npx-any-tool) above):
 
 ```bash
-npx skills add ngvoicu/specsmith-tdd -a <tool>
+npx skills add ngvoicu/specmint-tdd -g -a <tool>
 ```
 
 For manual setup, see the snippet format in [SKILL.md](SKILL.md).
@@ -474,16 +474,16 @@ Also covers: coverage tools (v8, JaCoCo, coverage.py, cargo-tarpaulin, coverlet)
 
 ## Plan Mode
 
-Spec Smith TDD **bypasses** Claude Code's built-in plan mode. The `/forge` command IS your planning phase — deep research, interviews, spec writing with Testing Architecture and alternating TEST-IMPL task pairs. You don't need plan mode at all.
+Spec Mint TDD **bypasses** Claude Code's built-in plan mode. The `/forge` command IS your planning phase — deep research, interviews, spec writing with Testing Architecture and alternating TEST-IMPL task pairs. You don't need plan mode at all.
 
-If you happen to be in plan mode when you run `/specsmith-tdd:forge`, Spec Smith TDD asks you to exit plan mode first (Shift+Tab), then rerun `/specsmith-tdd:forge`.
+If you happen to be in plan mode when you run `/specmint-tdd:forge`, Spec Mint TDD asks you to exit plan mode first (Shift+Tab), then rerun `/specmint-tdd:forge`.
 
 ## Project Structure
 
 ```
-specsmith-tdd/
+specmint-tdd/
 ├── .claude-plugin/
-│   ├── plugin.json                 # Plugin metadata (v1.2.0)
+│   ├── plugin.json                 # Plugin metadata (v1.0.0)
 │   └── marketplace.json            # Marketplace registration
 ├── commands/
 │   ├── forge.md                    # Research + test infra analysis → interview → TDD spec
@@ -501,7 +501,7 @@ specsmith-tdd/
 │   ├── command-contracts.md        # Behavioral contracts (20 TDD-specific)
 │   └── testing-knowledge.md        # Language-agnostic testing reference (6+ languages)
 ├── skills/
-│   └── specsmith-tdd/
+│   └── specmint-tdd/
 │       └── SKILL.md                # → ../../SKILL.md (symlink for plugin discovery)
 ├── SKILL.md                        # Universal skill (works with all tools)
 └── README.md
@@ -544,7 +544,7 @@ Full specification in [`references/spec-format.md`](references/spec-format.md). 
 
 Plan mode is a good idea with a bad implementation. It restricts Claude to read-only tools and asks for a plan. That's it. No persistence, no research depth, no interviews, no progress tracking, and certainly no TDD enforcement.
 
-Spec Smith TDD's `/forge` command does what plan mode should do:
+Spec Mint TDD's `/forge` command does what plan mode should do:
 
 - **Research depth**: Reads 10-20+ files, searches the web, pulls library docs, analyzes test infrastructure. Not a quick scan.
 - **Interviews**: Asks you targeted questions based on what it found — including testing preferences, isolation strategies, and coverage targets. Multiple rounds until there's no ambiguity.
@@ -554,6 +554,14 @@ Spec Smith TDD's `/forge` command does what plan mode should do:
 - **Persistence**: Everything is saved to files. Research notes, interviews, the spec itself, the TDD Log. Nothing lives only in context.
 - **Resumability**: Close the terminal, come back next week. The spec remembers exactly where you were — including which TDD phase you're in, which tests are failing, and what the last test run looked like.
 - **Multi-spec**: Juggle multiple features. Switch between them with one command.
+
+## Mint Plugin Family
+
+| Plugin | Purpose |
+|--------|---------|
+| **[specmint-core](https://github.com/ngvoicu/specmint-core)** | Persistent spec management — forge, implement, resume, pause |
+| **[specmint-tdd](https://github.com/ngvoicu/specmint-tdd)** | TDD-first fork with red-green-refactor enforcement |
+| **[datasmith-pg](https://github.com/ngvoicu/datasmith-pg)** | PostgreSQL schema design expertise — patterns, migrations, performance |
 
 ## License
 

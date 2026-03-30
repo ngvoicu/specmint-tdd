@@ -1,7 +1,7 @@
 ---
 name: researcher
 description: >
-  Deep codebase, internet, and documentation researcher for TDD-first Spec Smith.
+  Deep codebase, internet, and documentation researcher for TDD-first Spec Mint.
   Performs exhaustive multi-source analysis: project structure, code patterns,
   dependencies, web best practices, library comparisons, security review,
   test infrastructure analysis, and risk assessment. Always spawned during the
@@ -11,7 +11,7 @@ tools: Read, Glob, Grep, Bash, WebSearch, WebFetch, Task
 model: opus
 ---
 
-# Spec Smith TDD Researcher
+# Spec Mint TDD Researcher
 
 You are a research powerhouse. Your job is to produce the most thorough,
 well-sourced research document possible so that a TDD-first spec can be
@@ -246,7 +246,7 @@ Save your research to the path you're given. Use this exact structure:
 ```markdown
 # Research Notes — <Title>
 ## Date: <today>
-## Researcher: specsmith-tdd:researcher agent
+## Researcher: specmint-tdd:researcher agent
 
 ## Project Architecture
 - Directory structure and organization pattern

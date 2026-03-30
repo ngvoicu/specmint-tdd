@@ -5,7 +5,7 @@ disable-model-invocation: true
 
 # Forge a Spec (TDD)
 
-You are about to run the Spec Smith TDD forge workflow. This bypasses plan mode
+You are about to run the Spec Mint TDD forge workflow. This bypasses plan mode
 with something far more thorough: deep research -> interview -> more research
 -> more interview -> write spec -> review.
 
@@ -36,8 +36,8 @@ Before starting research, resolve spec identity:
 Before starting, check if you're in plan mode (read-only).
 
 - If in plan mode:
-  - Do not run `/specsmith-tdd:forge` in plan mode
-  - Ask the user to exit plan mode (Shift+Tab), then rerun `/specsmith-tdd:forge`
+  - Do not run `/specmint-tdd:forge` in plan mode
+  - Ask the user to exit plan mode (Shift+Tab), then rerun `/specmint-tdd:forge`
   - Stop here until plan mode is exited
 - If NOT in plan mode:
   - Create/initialize `.specs/<spec-id>/` before the first write
@@ -55,7 +55,7 @@ Before starting research, ensure the directory structure exists:
 3. If `.specs/registry.md` doesn't exist, initialize it with the header row.
 
 If directory creation fails because the environment is still read-only, ask
-the user to exit plan mode (Shift+Tab) and rerun `/specsmith-tdd:forge`.
+the user to exit plan mode (Shift+Tab) and rerun `/specmint-tdd:forge`.
 
 ## Phase 1: Deep Research
 
@@ -92,7 +92,7 @@ architecture:
 Use Glob, Grep, and Read aggressively. Read actual file contents, not just
 file names. Open 10-20 files if needed.
 
-**Always spawn the `specsmith-tdd:researcher` agent** (Task tool) to run an
+**Always spawn the `specmint-tdd:researcher` agent** (Task tool) to run an
 exhaustive parallel research pass. The researcher reads 15-30 files, runs
 3+ web searches, compares library candidates, and assesses risks. Save
 structured findings to `.specs/<id>/research-01.md`. Don't skip this —
@@ -426,5 +426,5 @@ the user explicitly says to proceed. The spec review is a gate — the user
 may want to add tasks, reorder phases, change scope, or rename things.
 Respect this pause.
 
-After user approval, implementation is handled by `/specsmith-tdd:implement`.
-Do not implement application code inside `/specsmith-tdd:forge`.
+After user approval, implementation is handled by `/specmint-tdd:implement`.
+Do not implement application code inside `/specmint-tdd:forge`.

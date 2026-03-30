@@ -8,11 +8,11 @@ disable-model-invocation: true
 Show detailed progress of the active spec with TDD state.
 
 1. If `.specs/registry.md` does not exist, report "No specs yet" and suggest
-   running `/specsmith-tdd:forge`.
+   running `/specmint-tdd:forge`.
 2. Read `.specs/registry.md` and find the spec with `active` status.
 3. If no active spec exists:
    - If specs exist, list them and ask which one to activate.
-   - If no specs exist, suggest running `/specsmith-tdd:forge`.
+   - If no specs exist, suggest running `/specmint-tdd:forge`.
 4. Load `.specs/<id>/SPEC.md` for the active spec and parse all phases
    and tasks.
 5. Parse the TDD Log to determine per-task TDD state:

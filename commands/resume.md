@@ -5,7 +5,7 @@ disable-model-invocation: true
 
 # Resume Spec (TDD)
 
-Follow the "Resuming" workflow from the specsmith-tdd skill (SKILL.md).
+Follow the "Resuming" workflow from the specmint-tdd skill (SKILL.md).
 See also `references/spec-format.md` for the SPEC.md template.
 
 1. Read `.specs/registry.md` to find the spec with `active` status
@@ -43,5 +43,5 @@ Context: <resume context excerpt — 2-3 lines>
     - If current task is a TEST task: write failing tests (RED)
     - If current task is an IMPL task: make failing tests pass (GREEN)
 
-If there are no specs at all, suggest running `/specsmith-tdd:forge` to
+If there are no specs at all, suggest running `/specmint-tdd:forge` to
 create one.
