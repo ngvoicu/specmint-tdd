@@ -555,6 +555,42 @@ Spec Mint TDD's `/forge` command does what plan mode should do:
 - **Resumability**: Close the terminal, come back next week. The spec remembers exactly where you were — including which TDD phase you're in, which tests are failing, and what the last test run looked like.
 - **Multi-spec**: Juggle multiple features. Switch between them with one command.
 
+## Pair with Kluris
+
+Spec Mint TDD reads your codebase and enforces red-green-refactor. [Kluris](https://kluris.io) gives your agents the *other* half — the tribal knowledge that never made it into comments: architecture decisions, test isolation conventions, flaky-test history, the "why" behind every weird choice.
+
+Pair them and `/forge` Phase 1b (research) stops guessing. It consults the brain first — so the test strategy lands aligned with how your team already does things.
+
+**Inside your AI coding agent:**
+
+```text
+> /specmint-tdd:forge add OAuth sign-in with GitHub
+```
+
+Phase 1a reads the code and test infrastructure. Phase 1b queries the brain:
+
+```text
+> /kluris-<brain> what do we know about auth testing and integration test isolation?
+```
+
+Phase 2 interviews you with that context in hand. The spec lands with TEST-IMPL pairs grounded in both the code *and* the testing patterns your team already agreed to — no re-litigating isolation strategies mid-implementation.
+
+**Why it works:**
+
+- **Grounded research** — Phase 1b pulls from a curated brain instead of just the web.
+- **Testing patterns** — isolation strategies, fixture conventions, and flaky-test history surface automatically.
+- **Institutional memory** — new hires (and agents) inherit context instantly.
+- **Spec reuse** — past specs, TDD Logs, and decisions surface during research.
+
+**Install Kluris:**
+
+```bash
+pipx install kluris
+kluris wake-up
+```
+
+Full setup at [kluris.io](https://kluris.io).
+
 ## Mint Plugin Family
 
 | Plugin | Purpose |
