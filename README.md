@@ -2,7 +2,7 @@
 
 **Plan mode, but actually good — with strict test-driven development.**
 
-Spec Mint TDD is a standalone fork of [Spec Mint Core](https://github.com/ngvoicu/specmint-core) that enforces strict TDD in AI coding workflows. Every task starts with a failing test, no production code ships without red tests, and all tests are isolated. Specs have feature phases with alternating TEST-IMPL task pairs (true red-green-refactor per pair), a Testing Architecture section, and a TDD Log audit trail proving discipline was followed.
+Spec Mint TDD enforces strict TDD in AI coding workflows. Every task starts with a failing test, no production code ships without red tests, and all tests are isolated. Specs have feature phases with alternating TEST-IMPL task pairs (true red-green-refactor per pair), a Testing Architecture section, and a TDD Log audit trail proving discipline was followed.
 
 Works with Claude Code (as a plugin), Codex, Cursor, Windsurf, Cline, Gemini CLI, and any AI coding tool that can read files.
 
@@ -160,25 +160,25 @@ API. Uses the existing middleware pattern in src/middleware/.
 | IMPL-AUTH-02 | Use passport.js | Direct middleware | Simpler for JWT-only; avoids passport session overhead |
 ```
 
-### The TDD Difference
+### The TDD Structure
 
-The key difference from [Spec Mint Core](https://github.com/ngvoicu/specmint-core) is the strict test-driven structure:
+Spec Mint TDD enforces test-first discipline at every level of the spec:
 
-| Aspect | Spec Mint Core | Spec Mint TDD |
-|--------|-----------|---------------|
-| Phase structure | Sequential phases | **Feature phases** with interleaved TEST-IMPL task pairs |
-| Task ordering | Independent tasks | **TEST-IMPL alternating**: red-green-red-green per pair |
-| Task codes | `[AUTH-01]` | `[TEST-AUTH-01]` and `[IMPL-AUTH-02]` |
-| Task linking | Independent | IMPL tasks have `-> satisfies [TEST-XX-NN]` |
-| Implementation | Write code, then test | **Write test (RED), run, implement (GREEN), refactor** |
-| Test execution | Optional | **Mandatory at every RED-GREEN-REFACTOR transition** |
-| Testing Architecture | Testing strategy section | **Full Testing Architecture**: framework, isolation, coverage, commands, anti-patterns |
-| Audit trail | None | **TDD Log** with red/green/refactor output per cycle |
-| Resume context | File paths, next step | File paths, next step, **last cycle, TDD phase** |
-| Research | Codebase + web | Codebase + web + **test infrastructure analysis** |
-| Interviews | Feature questions | Feature questions + **testing preferences** |
-| Blocking rule | None | **Per-task**: no IMPL until its TEST is done and failing |
-| Test claims | Allowed | **Must run actual tests** — no "tests would pass" |
+| Aspect | How Spec Mint TDD handles it |
+|--------|------------------------------|
+| Phase structure | **Feature phases** with interleaved TEST-IMPL task pairs |
+| Task ordering | **TEST-IMPL alternating**: red-green-red-green per pair |
+| Task codes | `[TEST-AUTH-01]` and `[IMPL-AUTH-02]` |
+| Task linking | IMPL tasks have `-> satisfies [TEST-XX-NN]` |
+| Implementation | **Write test (RED), run, implement (GREEN), refactor** |
+| Test execution | **Mandatory at every RED-GREEN-REFACTOR transition** |
+| Testing Architecture | **Full Testing Architecture**: framework, isolation, coverage, commands, anti-patterns |
+| Audit trail | **TDD Log** with red/green/refactor output per cycle |
+| Resume context | File paths, next step, **last cycle, TDD phase** |
+| Research | Codebase + web + **test infrastructure analysis** |
+| Interviews | Feature questions + **testing preferences** |
+| Blocking rule | **Per-task**: no IMPL until its TEST is done and failing |
+| Test claims | **Must run actual tests** — no "tests would pass" |
 
 ## Installation
 
@@ -192,16 +192,6 @@ Everything: all 8 slash commands (`/forge`, `/implement`, `/resume`, `/pause`, `
 # In Claude Code, run:
 /plugin marketplace add ngvoicu/specmint-tdd
 /plugin install specmint-tdd
-```
-
-Or manually:
-```bash
-git clone https://github.com/ngvoicu/specmint-tdd.git ~/.claude/plugins/specmint-tdd
-```
-
-After install, just run:
-```
-/specmint-tdd:forge "add user authentication"
 ```
 
 ### Path 2: Quick Setup via npx (Any Tool)
@@ -356,31 +346,6 @@ Then the next pair, and the next, and the next. True red-green-red-green.
 - **3 runs per cycle.** Tests MUST be run via Bash at every RED, GREEN, and REFACTOR transition. Claims like "tests would pass" are never acceptable.
 - **Tests are sacred.** Tests define expected behavior. During GREEN, if tests fail, fix the production code — never modify test assertions to match what the code returns. The only reason to touch a test is an actual bug (wrong import, syntax error). If a test expectation seems wrong, STOP and ask the user.
 - **Self-check before every task.** Am I about to write code without a failing test? Am I about to skip running tests? Am I about to modify a test to make it pass? If yes, stop and correct.
-
-## Multi-Tool Support
-
-The spec format is pure markdown. Claude Code, Codex, Cursor, Windsurf, Cline, and Gemini CLI can all work on the same `.specs/` directory.
-
-### Setting Up Other Tools
-
-Most tools can be set up via npx (see [Path 2](#path-2-quick-setup-via-npx-any-tool) above):
-
-```bash
-npx skills add ngvoicu/specmint-tdd -g -a <tool>
-```
-
-For manual setup, see the snippet format in [SKILL.md](SKILL.md).
-
-### Cross-Tool Sync
-
-All tools share the same files:
-- **Task codes** — `[TEST-AUTH-03]` and `[IMPL-AUTH-04]` are the same tasks everywhere
-- **`← current` marker** — Every tool knows which task is next
-- **Resume Context** — TDD phase, failing tests, last run, file paths, next step
-- **TDD Log** — Audit trail shared across sessions and tools
-- **Phase status markers** — `[pending]`, `[in-progress]`, `[completed]`, `[blocked]`
-
-**One rule:** Don't run two tools on the same spec simultaneously. Different specs in parallel is fine.
 
 ## The Forge Workflow (Detailed)
 
@@ -590,13 +555,6 @@ kluris wake-up
 ```
 
 Full setup at [kluris.io](https://kluris.io).
-
-## Mint Plugin Family
-
-| Plugin | Purpose |
-|--------|---------|
-| **[specmint-core](https://github.com/ngvoicu/specmint-core)** | Persistent spec management — forge, implement, resume, pause |
-| **[specmint-tdd](https://github.com/ngvoicu/specmint-tdd)** | TDD-first fork with red-green-refactor enforcement |
 
 ## License
 
