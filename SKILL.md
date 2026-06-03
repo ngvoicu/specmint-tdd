@@ -50,13 +50,6 @@ and the user's preference for tracked vs local-only spec state.
    updating both files. Never end a session with the registry out of sync
    with SPEC.md. This is non-negotiable — if you do nothing else, do this.
 
-## Claude Code Plugin
-
-If running as a Claude Code plugin, slash commands like `/specmint-tdd:forge`,
-`/specmint-tdd:resume`, `/specmint-tdd:pause` etc. are available. The
-`/forge` command replaces plan mode with deep research, iterative interviews,
-and spec writing.
-
 ## Session Start
 
 If active-spec context was injected by host tooling, use it directly
@@ -333,15 +326,6 @@ rotation. Next step: hook up rotation logic to the `/auth/refresh` endpoint."
 5. Set target status to `active` in frontmatter and in `.specs/registry.md`.
 6. Resume the target spec (full resume workflow).
 
-## Command Ownership Map
-
-- `SKILL.md`: global invariants, lifecycle rules, state authority, and conflict
-  handling, plus cross-tool OpenAPI behavior.
-- `commands/*.md` (Claude Code plugin only): command-specific entrypoints,
-  prompts, and output shapes.
-- If there is a conflict, preserve `Critical Invariants` from this file and
-  apply command-specific behavior only where it does not violate invariants.
-
 ## Spec Format
 
 ### Frontmatter
@@ -451,7 +435,7 @@ changes that would surprise someone comparing the spec to the code.
 
 ### SPEC.md Template
 
-Use this skeleton when creating new specs. For plugin users,
+Use this skeleton when creating new specs.
 `references/spec-format.md` has the full template with examples.
 
 ```markdown
@@ -551,7 +535,7 @@ full forge workflow: setup, research deeply, interview the user, iterate
 until clear, then write the spec.
 
 **Plan mode:** In Claude Code, if the environment is in read-only plan mode,
-ask the user to exit plan mode (Shift+Tab) and rerun `/specmint-tdd:forge`.
+ask the user to exit plan mode (Shift+Tab) and start the forge workflow again.
 Other tools: proceed normally.
 
 **The forge workflow never produces application code.** Its outputs are only
@@ -577,25 +561,25 @@ available resource so the spec won't need revision mid-build.
 
 Research runs on two parallel tracks:
 
-#### Track A: Researcher Agent
+#### Track A: Spawn a Research Subagent
 
-**In Claude Code:** Spawn the `specmint-tdd:researcher` agent (Task tool)
-for exhaustive parallel research. Provide: the user's request, spec ID,
-output path `.specs/<id>/research-01.md`, and any Context7 findings from
-Track B. The researcher maps the project architecture, reads 15-30 files,
-runs 3+ web searches, compares library candidates, assesses risks, and
-analyzes the full test infrastructure.
+**If your tool supports subagents:** Spawn a research subagent with the Task
+tool, using the brief in `references/researcher.md`. Provide: the user's
+request, spec ID, output path `.specs/<id>/research-01.md`, and any Context7
+findings from Track B. The research subagent maps the project architecture,
+reads 15-30 files, runs 3+ web searches, compares library candidates, assesses
+risks, and analyzes the full test infrastructure.
 
-**In other tools (Cursor, Windsurf, Codex, Cline, Gemini):** Agent spawning
-is not available. Perform the research inline yourself — scan the project
-structure, read relevant files (15-30 for non-trivial features), search
-the web for best practices and library comparisons, and analyze the existing
-test infrastructure (frameworks, runners, mocking patterns, testcontainers,
-coverage tools). Save findings to `.specs/<id>/research-01.md`.
+**If subagents are not available:** Perform the research inline yourself —
+scan the project structure, read relevant files (15-30 for non-trivial
+features), search the web for best practices and library comparisons, and
+analyze the existing test infrastructure (frameworks, runners, mocking
+patterns, testcontainers, coverage tools). Save findings to
+`.specs/<id>/research-01.md`.
 
 #### Track B: Context7 & Cross-Skill Research (in parallel)
 
-While the researcher runs (or between inline research steps):
+While the research subagent runs (or between inline research steps):
 
 - **Context7**: If available, pull up-to-date documentation for 2-5 key
   libraries. Check API changes, deprecated features, and recommended patterns.
@@ -713,8 +697,6 @@ reusable `$ref` schemas, and accurate parameters/responses/security. Write
 per-endpoint docs under `.openapi/endpoints/{method}-{path-slug}.md`.
 Preserve manual additions when updating existing files. Report totals.
 
-Plugin users: see `commands/openapi.md` for the full phase-by-phase workflow.
-
 ## Before Session Ends
 
 If the session is ending:
@@ -813,7 +795,7 @@ This is irreversible — consider archiving instead.
 The spec format is pure markdown with YAML frontmatter. Any tool that can
 read and write files can use these specs:
 
-- **Claude Code**: Full plugin support or skill via `npx skills add`
+- **Claude Code**: Skill via `npx skills add` (auto-triggers on natural language)
 - **Codex**: Snippet in AGENTS.md or skill via `npx skills add`
 - **Cursor / Windsurf / Cline**: Snippet in rules file
 - **Gemini CLI**: Snippet in GEMINI.md

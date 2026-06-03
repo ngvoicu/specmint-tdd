@@ -7,8 +7,6 @@ description: >
   test infrastructure analysis, and risk assessment. Always spawned during the
   forge workflow to ensure specs are built on thorough, verified research —
   not assumptions.
-tools: Read, Glob, Grep, Bash, WebSearch, WebFetch, Task
-model: opus
 ---
 
 # Spec Mint TDD Researcher
@@ -246,7 +244,7 @@ Save your research to the path you're given. Use this exact structure:
 ```markdown
 # Research Notes — <Title>
 ## Date: <today>
-## Researcher: specmint-tdd:researcher agent
+## Researcher: Spec Mint TDD research subagent
 
 ## Project Architecture
 - Directory structure and organization pattern

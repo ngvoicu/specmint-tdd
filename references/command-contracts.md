@@ -1,7 +1,7 @@
 # Command Contracts
 
-This file defines functional contracts for `commands/*.md` and the universal
-`SKILL.md` behavior. Use it as a review checklist before releases.
+This file defines functional contracts for the `SKILL.md` skill behavior.
+Use it as a review checklist before releases.
 
 ## Global Contracts
 
@@ -21,22 +21,22 @@ This file defines functional contracts for `commands/*.md` and the universal
 
 ## Command Contracts
 
-### `/specmint-tdd:forge`
+### Forge
 
 1. Resolve `<spec-id>` before research output paths are referenced.
 2. Collision-check existing spec IDs before creating new files.
 3. Forge must not run in plan mode; if plan mode is active, require exit before
    continuing (Claude Code only — other tools proceed normally).
-4. Create `.specs/<spec-id>/` directory before spawning the researcher or
-   writing any research output.
+4. Create `.specs/<spec-id>/` directory before spawning the research subagent
+   or writing any research output.
 5. Output scope is `.specs/` artifacts only (`research-*.md`, `interview-*.md`,
    `SPEC.md`, `registry.md` updates).
-6. After approval, handoff to `/specmint-tdd:implement` instead of implementing
+6. After approval, handoff to implementation instead of implementing
    inside forge.
 7. Interview must ask about acceptance criteria ("What does 'done' look like?").
 8. SPEC.md must include `## Acceptance Criteria` with testable checkboxes.
 
-### `/specmint-tdd:implement`
+### Implement
 
 1. Supports scope parsing: current flow, phase-specific, all phases, task code.
 2. For each completed task: checkbox + current marker + phase markers +
@@ -50,35 +50,35 @@ This file defines functional contracts for `commands/*.md` and the universal
    - Mark phase `[blocked]` only when the phase is blocked.
    - Record blocker context in Resume Context/Decision Log/Deviations as needed.
 
-### `/specmint-tdd:resume`
+### Resume
 
 1. If no active spec exists, list specs and request target.
 2. Include progress, current phase/task, and Resume Context in output.
 
-### `/specmint-tdd:pause`
+### Pause
 
 1. If no active spec exists, report no-op and stop.
 2. Persist detailed Resume Context with concrete file/function references.
 3. Set status `paused` and sync registry.
 
-### `/specmint-tdd:switch`
+### Switch
 
 1. Validate target ID and target `SPEC.md` existence before pausing current spec.
 2. If target already active, report and stop.
 3. Pause current (if any), activate target, resume target, sync registry.
 
-### `/specmint-tdd:list`
+### List
 
 1. Handle missing registry gracefully.
 2. Group by status in order: active, paused, completed, archived.
 3. If `SPEC.md` missing for a row, keep row visible and flag it.
 
-### `/specmint-tdd:status`
+### Status
 
 1. Show detailed phase/task breakdown for active spec.
 2. If no active spec, guide to activate one.
 
-### `/specmint-tdd:openapi`
+### OpenAPI
 
 1. Generate/update `.openapi/openapi.yaml` and `.openapi/endpoints/*.md`.
 2. Preserve manual additions when updating existing files.
@@ -88,20 +88,20 @@ This file defines functional contracts for `commands/*.md` and the universal
 
 1. `SKILL.md` must include cross-tool behavior for all declared triggers.
 2. If `generate openapi` is listed as a trigger, OpenAPI workflow behavior must
-   be defined in `SKILL.md` (not only plugin command files).
-3. Command-specific docs can specialize behavior but cannot violate critical
+   be defined in `SKILL.md`.
+3. Reference docs can elaborate on behavior but cannot violate critical
    invariants from `SKILL.md`.
 4. `SKILL.md` must be self-contained for standalone users (`npx skills add`).
    Any content essential for spec creation must be inlined (e.g., the SPEC.md
-   template skeleton). References to `references/*.md` and `commands/*.md`
-   should be conditional ("Plugin users: see...").
-5. Agent spawning (researcher) must have a graceful fallback for tools that
-   don't support agents.
+   template skeleton). Files under `references/*.md` provide supporting detail.
+5. The research subagent (`references/researcher.md`) is spawned via the Task
+   tool as described in `SKILL.md`, with a graceful fallback to inline research
+   for tools that don't support subagents.
 
 ## TDD Contracts
 
-These contracts enforce test-driven development discipline across all commands
-and the universal skill. They are **non-negotiable** — violations break the
+These contracts enforce test-driven development discipline across the
+universal skill. They are **non-negotiable** — violations break the
 TDD guarantee.
 
 ### Global TDD Contracts
@@ -167,7 +167,7 @@ TDD guarantee.
     review MUST verify this before presenting the spec. If any phase fails
     this check, restructure it before presenting to the user.
 
-12. **Research includes test infrastructure.** The researcher agent MUST
+12. **Research includes test infrastructure.** The research subagent MUST
     analyze the project's existing test infrastructure (framework, patterns,
     coverage tools, anti-patterns) as part of the research phase.
 
@@ -226,7 +226,7 @@ TDD guarantee.
 
 ## Icon Standards
 
-All commands and SKILL.md must use these standardized icons:
+SKILL.md must use these standardized icons:
 
 **Registry-level** (active/paused/completed specs):
 - `->` active
@@ -240,12 +240,9 @@ All commands and SKILL.md must use these standardized icons:
 
 ## Release Checklist
 
-1. `claude plugin validate .claude-plugin/plugin.json` passes.
-2. `claude plugin validate .claude-plugin/marketplace.json` passes without
-   warnings.
-3. Paths referenced in docs and templates exist (excluding placeholder paths).
-4. Command contracts in this file still match `commands/*.md` and `SKILL.md`.
-5. TDD contracts are enforced by all commands and the universal skill.
-6. `SKILL.md` is self-contained for standalone use (spec template inlined,
-   researcher fallback documented).
-7. Status icons are consistent across all files (see Icon Standards above).
+1. Paths referenced in docs and templates exist (excluding placeholder paths).
+2. Command contracts in this file still match `SKILL.md`.
+3. TDD contracts are enforced by the universal skill.
+4. `SKILL.md` is self-contained for standalone use (spec template inlined,
+   research subagent fallback documented).
+5. Status icons are consistent across all files (see Icon Standards above).
