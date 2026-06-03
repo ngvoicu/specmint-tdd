@@ -421,13 +421,13 @@ Pair them and the forge workflow's Phase 1b (research) stops guessing. It consul
 **Inside your AI coding agent:**
 
 ```text
-> forge add OAuth sign-in with GitHub
-```
+> write a spec for OAuth sign-in with GitHub — check the brain, the codebase, the tests, and the web
 
-Phase 1a reads the code and test infrastructure. Phase 1b queries the brain:
+research · phase 1a · reading codebase + tests .. done
+research · phase 1b · kluris wake-up ........... done
+research · phase 1c · synthesis ............... done
 
-```text
-> /kluris-<brain> what do we know about auth testing and integration test isolation?
+> spec written to .specs/oauth-github.md — ready for interview.
 ```
 
 Phase 2 interviews you with that context in hand. The spec lands with TEST-IMPL pairs grounded in both the code *and* the testing patterns your team already agreed to — no re-litigating isolation strategies mid-implementation.
