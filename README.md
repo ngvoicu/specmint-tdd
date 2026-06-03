@@ -1,5 +1,7 @@
 # Spec Mint TDD
 
+[![Version](https://img.shields.io/badge/version-3.0.0-7c5cff)](https://github.com/ngvoicu/specmint-tdd)
+
 **Plan mode, but actually good — with strict test-driven development.**
 
 Spec Mint TDD enforces strict TDD in AI coding workflows. Every task starts with a failing test, no production code ships without red tests, and all tests are isolated. Specs have feature phases with alternating TEST-IMPL task pairs (true red-green-refactor per pair), a Testing Architecture section, and a TDD Log audit trail proving discipline was followed.
