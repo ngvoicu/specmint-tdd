@@ -414,7 +414,7 @@ Spec Mint TDD's forge workflow does what plan mode should do:
 
 ## Pair with Kluris
 
-Spec Mint TDD reads your codebase and enforces red-green-refactor. [Kluris](https://kluris.io) gives your agents the *other* half — the tribal knowledge that never made it into comments: architecture decisions, test isolation conventions, flaky-test history, the "why" behind every weird choice.
+Spec Mint TDD reads your codebase and enforces red-green-refactor. [Kluris](https://kluris.ngvoicu.dev) gives your agents the *other* half — the tribal knowledge that never made it into comments: architecture decisions, test isolation conventions, flaky-test history, the "why" behind every weird choice.
 
 Pair them and the forge workflow's Phase 1b (research) stops guessing. It consults the brain first — so the test strategy lands aligned with how your team already does things.
 
@@ -446,7 +446,7 @@ pipx install kluris
 kluris wake-up
 ```
 
-Full setup at [kluris.io](https://kluris.io).
+Full setup at [kluris.ngvoicu.dev](https://kluris.ngvoicu.dev).
 
 ## License
 
